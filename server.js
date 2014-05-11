@@ -74,7 +74,7 @@ server.post('/item', postItem);
 server.post('/item/:id/like', postLike);
 
 server.get(/.*/, restify.serveStatic({
-  directory: './public',
+  directory: './app',
   default: 'index.html'
 }));
 
