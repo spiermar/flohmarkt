@@ -73,6 +73,11 @@ server.get('/item', getItem);
 server.post('/item', postItem);
 server.post('/item/:id/like', postLike);
 
+server.get(/.*/, restify.serveStatic({
+  directory: './public',
+  default: 'index.html'
+}));
+
 var port = Number(process.env.PORT || 5000);
 server.listen(port, function() {
   console.log('%s listening at %s', server.name, server.url);
