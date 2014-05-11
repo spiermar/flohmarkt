@@ -1,0 +1,26 @@
+{
+  "name": "flohmarkt",
+  "version": "0.0.0",
+  "description": "Simple online classifieds in Node",
+  "main": "server.js",
+  "dependencies": {
+    "express": "~4.1.2",
+    "mongoose": "~3.8.9",
+    "restify": "~2.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spiermar/flohmarkt.git"
+  },
+  "author": "Martin Spier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spiermar/flohmarkt/issues"
+  },
+  "homepage": "https://github.com/spiermar/flohmarkt"
+}
