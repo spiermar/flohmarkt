@@ -4,6 +4,7 @@
   "description": "Simple online classifieds in Node",
   "main": "server.js",
   "dependencies": {
+    "bower": "^1.3.1",
     "mongoose": "~3.8.9",
     "restify": "~2.7.0"
   },
