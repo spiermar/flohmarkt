@@ -4,7 +4,10 @@ var restify = require('restify');
 var mongoose = require('mongoose');
 var uri = String(process.env.MONGODB_URI);
 
-var server = restify.createServer();
+var server = restify.createServer({
+  name: 'flohmarkt',
+  version: '1.0.0'
+});
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 server.use(restify.CORS());
@@ -90,8 +93,8 @@ function postItem(req, res, next) {
 }
 
 // Set up our routes and start the server
-server.get('/items', getItems);
-server.post('/items', postItem);
+server.get({path: '/REST/items', version: '1.0.0'}, getItems);
+server.post({path: 'REST/items', version: '1.0.0'}, postItem);
 
 server.get(/.*/, restify.serveStatic({
   directory: './app',
