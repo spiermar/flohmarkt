@@ -1,77 +1,97 @@
-var restify = require('restify');
-var server = restify.createServer();
-server.use(restify.bodyParser());
+'use strict';
 
+var restify = require('restify');
 var mongoose = require('mongoose');
 var uri = String(process.env.MONGODB_URI);
-db = mongoose.connect(uri),
-Schema = mongoose.Schema;
+
+var server = restify.createServer();
+server.use(restify.queryParser());
+server.use(restify.bodyParser());
+server.use(restify.CORS());
+
+mongoose.connect(uri);
+var Schema = mongoose.Schema;
 
 // User schema
-var UserSchema = new Schema({
-  name: String,
+var userSchema = new Schema({
+  name: { type: String, required: true, unique: true },
   email: String
 });
 
 // Use the schema to register a model with MongoDb
-mongoose.model('User', UserSchema);
-var User = mongoose.model('User');
+var User = mongoose.model('User', userSchema);
 
-// Item schema
-var ItemSchema = new Schema({
-  name: String,
-  description: String,
-  price: Number,
-  image: String,
-  likes: [UserSchema]
+// Session schema
+var sessionSchema = new Schema({
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
 });
 
 // Use the schema to register a model with MongoDb
-mongoose.model('Item', ItemSchema); 
-var Item = mongoose.model('Item');
+var Session = mongoose.model('Session', sessionSchema);
+
+// Item schema
+var itemSchema = new Schema({
+  permalink: {type: String, required: true, unique: true},
+  name: {type: String, required: true},
+  snippet: String,
+  details: String,
+  price: Number,
+  created: Date,
+  images: [String],
+  likes: [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }]
+});
+
+// Use the schema to register a model with MongoDb
+var Item = mongoose.model('Item', itemSchema);
 
 // This function is responsible for returning all entries for the Item model
-function getItem(req, res, next) {
-  // Resitify currently has a bug which doesn't allow you to set default headers
-  // This headers comply with CORS and allow us to server our response to any origin
-  res.header("Access-Control-Allow-Origin", "*"); 
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  // .find() without any arguments, will return all results
-  // the `-1` in .sort() means descending order
-  Item.find().sort('likes').exec(function (err, data) {
-    res.send(data);
+function getItems(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin','*');
+  Item.find().limit(20).sort({created: -1}).exec(function(err , items) {
+    if (err) {
+      return next(err);
+    } else {
+      var list = [];
+      for (var i = 0; i < items.length; i++) {
+        list.push({permalink: items[i].permalink, name: items[i].name, snippet: items[i].snippet, price: items[i].price, image: items[i].images[0], likes: items[i].likes.length});
+      }
+      res.send(list);
+      return next();
+    }
   });
 }
 
+// This function is responsible for creating a new Item
 function postItem(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  // Create a new Item model, fill it up and save it to Mongodb
-  var item = new Item();
+  res.setHeader('Access-Control-Allow-Origin','*');
+  var item = new Item(req.params);
+  item.permalink = req.params.permalink;
   item.name = req.params.name;
-  item.description = req.params.description;
+  item.snippet = req.params.snippet;
+  item.details = req.params.details;
   item.price = req.params.price;
-  item.likes = [];
-  item.save(function() {
-    res.send(req.body);
-  });
-}
-
-function postLike(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  Item.findOne({ '_id': req.params.id }, function (err, item) {
-  	item.likes.push({ name: req.params.name, email: req.params.email });
-  	item.save(function() {
-      res.send(item);
-  	});
+  item.created = new Date();
+  item.images = req.params.images;
+  item.likes = req.params.likes;
+  item.save(function(err, item, numberAffected) {
+    if (err) {
+      return next(err);
+    } else {
+      res.send(201, item);
+      return next();
+    }
   });
 }
 
 // Set up our routes and start the server
-server.get('/item', getItem);
-server.post('/item', postItem);
-server.post('/item/:id/like', postLike);
+server.get('/items', getItems);
+server.post('/items', postItem);
 
 server.get(/.*/, restify.serveStatic({
   directory: './app',
