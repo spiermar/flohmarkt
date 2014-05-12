@@ -1,9 +1,17 @@
-<div class="container">
-  <div class="row"></div>
-  <ul>
-    <li ng-repeat="item in items">
-      <span>{{item.name}}</span>
-      <p>{{item.snippet}}</p>
-    </li>
-  </ul>
+<div class="col-md-6 col-md-offset-3">
+  <div class="row" ng-repeat="item in items">
+  	<div class="col-md-12">
+  	  <h3>{{item.name}} <button type="button" class="btn btn-default btn-sm" style="margin-top:-5px;">Details</button></h3>
+  	</div>
+  	<div class="col-md-6">
+  	  <img ng-src="{{item.image}}" class="img-responsive img-circle" width="300x" style="margin-top: 15px; margin-bottom: 15px;"/>
+  	</div>
+  	<div class="col-md-6">
+  	  <p class="lead">{{item.snippet}}</p>
+  	  <p>${{item.price}}</p>
+  	  <button type="button" class="btn btn-primary pull-right" style="margin-top: 25px;">Like&nbsp;&nbsp;<span class="badge">{{item.likes}}</span></button>
+  	</div>
+  	<div class="clearfix visible-xs"></div>
+  	<hr>
+  </div>
 </div>
