@@ -13,13 +13,13 @@
   <!-- <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css"> -->
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-  <!-- <link rel="stylesheet" href="css/app.css"/> -->
+  <link rel="stylesheet" href="css/app.css"/>
   <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 <body>
   <div class="container">
 
-    <div class="jumbotron" style="margin-top: 19px;">
+    <div class="jumbotron" style="margin-top: 20px;">
       <h1>Flohmarkt</h1>
       <p class="lead">Simple Classifieds with Node.js, Restify, MongoDb and AngularJS</p>
     </div>
@@ -28,11 +28,13 @@
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div ng-view class="row"></div>
+    <div ng-view></div>
 
-    <div class="footer">
-      <p>&copy; Flohmarkt 2014</p>
-    </div>
+    <!-- FOOTER -->
+    <footer>
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>&copy; 2014 Flohmarkt</p>
+    </footer>
 
   </div>
 
