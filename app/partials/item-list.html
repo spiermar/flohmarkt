@@ -6,11 +6,12 @@
     </div>
     <div class="col-md-7">
       <h2 class="featurette-heading">{{item.name}}. <span class="text-muted">${{item.price}}</span></h2>
-      <p class="lead">{{item.snippet}}</p>
+      <p class="lead">{{item.snippet}}.</p>
+      <p><a href="#">View details</a></p>
       <button type="button" class="btn btn-default" style="margin-top: 25px;">Like&nbsp;&nbsp;<span class="badge">{{item.likes}}</span></button>
     </div>
     <div class="col-md-5" ng-if="$even == true">
-      <img ng-src="{{item.image}}" class="featurette-image img-responsive" width="500x"/>
+      <a href="#"><img ng-src="{{item.image}}" class="featurette-image img-responsive" width="500x"/></a>
     </div>
   </div>
 </div>
