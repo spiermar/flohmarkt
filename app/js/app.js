@@ -12,11 +12,15 @@ var flohmarktApp = angular.module('flohmarktApp', [
 
 flohmarktApp.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.
-        when('/items', {
+        when('/item', {
             templateUrl: 'partials/item-list.html',
             controller: 'ItemListCtrl'
         }).
+        when('/item/:permalink', {
+            templateUrl: 'partials/item-details.html',
+            controller: 'ItemDetailsCtrl'
+        }).
         otherwise({
-            redirectTo: '/items'
+            redirectTo: '/item'
         });
 }]);

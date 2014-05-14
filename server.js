@@ -76,6 +76,18 @@ function getItems(req, res, next) {
     });
 }
 
+function getItem(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    Item.findOne({permalink: req.params.permalink}, function (err, item) {
+        if (err) {
+            return next(err);
+        }
+        res.send(item);
+        return next();
+    });
+}
+
 // This function is responsible for creating a new Item
 function postItem(req, res, next) {
     var item = new Item();
@@ -101,8 +113,9 @@ function postItem(req, res, next) {
 }
 
 // Set up our routes and start the server
-server.get({path: '/REST/items', version: '1.0.0'}, getItems);
-server.post({path: '/REST/items', version: '1.0.0'}, postItem);
+server.get({path: '/REST/item', version: '1.0.0'}, getItems);
+server.get({path: '/REST/item/:permalink', version: '1.0.0'}, getItem);
+server.post({path: '/REST/item', version: '1.0.0'}, postItem);
 
 
 //TODO: find a better regex for whatever does't start with /REST
